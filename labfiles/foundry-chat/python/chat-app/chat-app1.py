@@ -1,4 +1,5 @@
 import os
+from urllib import response
 from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -42,18 +43,12 @@ def main():
 
             # Get a response
             
-            completion = openai_client.chat.completions.create(
+            response = openai_client.responses.create(
                 model=model_deployment,
-                messages=[{
-                    "role": "system",
-                    "content": "You are a helpful assistant that answers questions and provide information"
-                },
-                {
-                    "role": "user",
-                    "content": input_text
-                }]
+                instructions = "You are a helpful assistant that answers questions and provide information",
+                input=input_text
             )
-            print(completion.choices[0].message.content)
+            print(response.output_text)
 
     except Exception as ex:
         print(ex)
